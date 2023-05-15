@@ -41,4 +41,15 @@ impl InscriptionNumberToInscriptionId {
         )
     }
 
+    pub fn range(db: &Database, from: u64, size: usize) -> Result<Vec<(u64, InscriptionIdValue)>> {
+        Ok(
+            db.begin_read()?
+                .open_table(INSCRIPTION_NUMBER_TO_INSCRIPTION_ID)?
+                .range(from..)?
+                .take(size)
+                .map(|(token_id, inscription_id)| (token_id.value(), inscription_id.value().clone()))
+                .collect(),
+        )
+    }
+
 }

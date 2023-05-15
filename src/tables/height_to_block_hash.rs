@@ -35,4 +35,15 @@ impl HeightToBlockHash {
         )
     }
 
+    pub fn range(db: &Database, from: u64, size: usize) -> Result<Vec<(u64, [u8;32])>> {
+        Ok(
+            db.begin_read()?
+                .open_table(HEIGHT_TO_BLOCK_HASH)?
+                .range(from..)?
+                .take(size.try_into().unwrap())
+                .map(|(block_number, block_hash)| (block_number.value(), block_hash.value().clone()))
+                .collect(),
+        )
+    }
+
 }
