@@ -5,7 +5,17 @@ mod tables;
 #[allow(unused)]
 fn main() -> Result<(), Error> {
     //let db = Database::create("data/index.redb")?;
-    let db = Database::create("data/regtest/index.redb")?;
+    //let db = Database::create("data/regtest/index.redb")?;
+    let db = unsafe { Database::builder().open_mmapped("data/regtest/index.redb") }?; 
+    /*
+        Ok(database) => {
+            database
+        }
+        Err(redb::Error::Io(error)) if error.kind() == io::ErrorKind::NotFound => {
+             
+        }
+    };
+    */
     //导出当前所有的NFT信息
     //token_id, genesis_tx_hash, genesis_vout_index, genesis_fee, genesis_height, sat, genesis_timestamp, currrent_tx, current_index, offset
     let mut start: u64 = 0;
